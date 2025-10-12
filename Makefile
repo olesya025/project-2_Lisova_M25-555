@@ -1,3 +1,9 @@
+install:
+	poetry install
+
+project:
+	poetry run project
+
 build:
 	poetry build
 
@@ -7,4 +13,7 @@ publish:
 package-install:
 	pipx install --force dist/*.whl
 
-.PHONY: build publish package-install
+lint:
+	poetry run ruff check .
+
+.PHONY: install project build publish package-install lint

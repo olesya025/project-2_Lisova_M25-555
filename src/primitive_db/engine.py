@@ -8,7 +8,8 @@ def welcome():
     print("<command> help - справочная информация")
     
     while True:
-        command = prompt.string("Введите команду: ").strip()  # Добавили .strip() для удаления пробелов
+        # Добавили .strip() для удаления пробелов
+        command = prompt.string("Введите команду: ").strip()
         
         if command == "exit":
             print("Выход из программы...")

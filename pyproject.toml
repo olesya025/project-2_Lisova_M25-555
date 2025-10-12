@@ -19,3 +19,16 @@ project = "src.primitive_db.main:main"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "ruff (>=0.14.0,<0.15.0)"
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+exclude = ["venv", ".venv", "dist", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = []
