@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["Olesya Lisova"]
 readme = "README.md"
-
 packages = [
     { include = "src" },
 ]
@@ -14,15 +13,11 @@ python = "^3.8"
 prompt = "^0.4.1"
 
 [tool.poetry.scripts]
-project = "src.primitive_db.main:main"
+database = "src.primitive_db.main:main"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-[dependency-groups]
-dev = [
-    "ruff (>=0.14.0,<0.15.0)"
-]
 
 [tool.ruff]
 line-length = 88

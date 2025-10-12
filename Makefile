@@ -1,8 +1,8 @@
 install:
 	poetry install
 
-project:
-	poetry run project
+database:
+	poetry run database
 
 build:
 	poetry build
@@ -16,4 +16,4 @@ package-install:
 lint:
 	poetry run ruff check .
 
-.PHONY: install project build publish package-install lint
+.PHONY: install database build publish package-install lint
