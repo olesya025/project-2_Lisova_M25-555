@@ -137,20 +137,20 @@ def handle_drop_table(args: List[str]) -> bool:
     
     try:
         metadata = load_metadata()
-        
         if not isinstance(metadata, dict):
             print("Ошибка: Метаданные повреждены")
             return False
-            
+
         success = drop_table(metadata, table_name)
-        
         if success:
+            # ✅ ВАЖНО: Сохраняем обновленные метаданные
+            from src.primitive_db.utils import save_metadata
+            save_metadata(metadata)
             print(f'Таблица "{table_name}" успешно удалена.')
         else:
             print(f'Не удалось удалить таблицу "{table_name}"')
+            return False
             
-        return False
-        
     except Exception as e:
         print(f"Ошибка при удалении таблицы: {e}")
         return False

@@ -62,15 +62,15 @@ def create_table(
     if table_name in metadata:
         raise ValueError(f'Table "{table_name}" already exists.')
 
-    # Add automatic ID column
+    # Добавляем столбец ID
     table_columns = ["ID:int"]
 
-    # Process user columns
+    # Обработка столбцов
     for column_def in columns:
         name, col_type = validate_column_definition(column_def)
         table_columns.append(f"{name}:{col_type}")
 
-    # Save table structure
+    # Сохраняем струкутуру таблицы
     metadata[table_name] = {
         "columns": table_columns,
     }
@@ -82,22 +82,38 @@ def create_table(
 
 @handle_db_errors
 @confirm_action("удаление таблицы")
-def drop_table(metadata: Dict[str, Any], table_name: str) -> bool:
+def drop_table(metadata: dict, table_name: str) -> bool:
     """
-    Delete table from metadata.
-
+    Удаляет таблицу из метаданных и удаляет файл данных.
+    
     Args:
-        metadata: Current database metadata
-        table_name: Table name to delete
-
+        metadata: Словарь метаданных
+        table_name: Имя таблицы для удаления
+        
     Returns:
-        True if successful, False otherwise
+        True если успешно, иначе False
     """
     if table_name not in metadata:
-        raise ValueError(ERROR_TABLE_NOT_FOUND.format(table_name))
-
-    del metadata[table_name]
-    return save_metadata(metadata)
+        print(f'Таблица "{table_name}" не существует.')
+        return False
+    
+    try:
+        # Удаляем из метаданных
+        del metadata[table_name]
+        
+        # Удаляем файл данных
+        import os
+        from src.primitive_db.utils import get_table_data_path
+        
+        data_file = get_table_data_path(table_name)
+        if os.path.exists(data_file):
+            os.remove(data_file)
+            print(f"Файл данных {data_file} удален")
+        
+        return True
+    except Exception as e:
+        print(f"Ошибка при удалении таблицы: {e}")
+        return False
 
 @handle_db_errors
 def list_tables(metadata: Dict[str, Any]) -> List[str]:
@@ -210,18 +226,18 @@ def insert(
         expected = len(user_columns)
         raise ValueError(f"Expected {expected} values, got {len(values)}")
 
-    # Load existing data
+    # Загружаем данные
     table_data = load_table_data(table_name)
 
-    # Generate new ID
+    # Генерируем новый ID
     new_id = 1
     if table_data:
         new_id = max(record.get("ID", 0) for record in table_data) + 1
 
-    # Create new record
+    # Создаем новую запись
     new_record = {"ID": new_id}
 
-    # Validate and add user values
+    # Проверяем и добавляем значения для user
     for i, column in enumerate(user_columns):
         expected_type = column_types[column]
         try:
@@ -230,7 +246,7 @@ def insert(
         except ValueError as e:
             raise ValueError(f"Column '{column}': {e}")
 
-    # Add record and save
+    # Добавляем запись и сохраняем
     table_data.append(new_record)
     return save_table_data(table_name, table_data)
 
