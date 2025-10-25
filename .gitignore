@@ -6,3 +6,9 @@ db_meta.json
 data/*.backup
 data/
 *.backup
+
+# Новое
+*.cast
+.DS_Store  
+Thumbs.db
+*.tmp
