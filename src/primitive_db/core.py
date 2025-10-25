@@ -103,6 +103,7 @@ def drop_table(metadata: dict, table_name: str) -> bool:
         
         # Удаляем файл данных
         import os
+
         from src.primitive_db.utils import get_table_data_path
         
         data_file = get_table_data_path(table_name)
